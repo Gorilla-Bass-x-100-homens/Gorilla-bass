@@ -1,4 +1,4 @@
-/* Reset básico */
+/* Reset e fontes básicas */
 * {
   margin: 0;
   padding: 0;
@@ -7,147 +7,149 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom, #a2f5a2, #4ca14c);
-  color: #1d1d1d;
-  text-align: center;
-  padding: 20px;
-}
-
-h1 {
-  font-size: 2.5em;
-  margin-bottom: 20px;
-  color: #2e5e2e;
-}
-
-/* Status bar */
-#status {
-  background: #fff;
-  border: 2px solid #3a833a;
-  border-radius: 10px;
-  padding: 15px;
-  width: 90%;
-  max-width: 600px;
-  margin: 0 auto 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#status p {
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-/* Batalha */
-#batalha {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 40px;
-  margin-bottom: 20px;
-}
-
-#gorila {
-  width: 120px;
-  transition: transform 0.3s;
-}
-
-/* Animações visuais simples */
-#gorila.ataque {
-  transform: scale(1.2) rotate(-10deg);
-}
-
-#gorila.defesa {
-  filter: brightness(1.2);
-}
-
-#gorila.cura {
-  animation: curarBrilho 1s infinite alternate;
-}
-
-@keyframes curarBrilho {
-  0% { filter: brightness(1); }
-  100% { filter: brightness(1.5); }
-}
-
-#humanos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25px, 1fr));
-  gap: 5px;
-  max-width: 300px;
-}
-
-.humano {
-  font-size: 20px;
-  transition: opacity 0.3s;
-}
-
-.humano.vivo {
+  background: linear-gradient(to bottom, #d7f0e6, #a0cfa5); /* corrigido: adicionado 'to bottom' para clareza */
   color: #222;
+  min-height: 100vh;
 }
 
-.humano.morto {
-  color: #999;
-  opacity: 0.4;
-  text-decoration: line-through;
+/* Container principal */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+/* Título */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #2e7d32;
+}
+
+/* Barra de status */
+.status {
+  background: #f1f8e9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status p {
+  font-size: 1.2rem;
+  margin: 8px 0;
 }
 
 /* Botões de ação */
-#acoes {
+.buttons {
   margin-bottom: 20px;
 }
 
-#acoes button {
-  background-color: #2e7d32;
+.buttons button {
+  background: #388e3c;
   color: white;
   border: none;
-  margin: 10px;
-  padding: 12px 24px;
+  padding: 12px 20px;
+  margin: 0 8px;
+  border-radius: 6px;
   font-size: 16px;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s;
 }
 
-#acoes button:hover {
-  background-color: #1b5e20;
+.buttons button:hover {
+  background: #2e7d32;
 }
 
-#acoes button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
+/* Campo de batalha */
+#campoDeBatalha {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  background: #dcedc8;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 150px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 5px #ccc;
 }
 
-/* Log de mensagens */
+/* Estilo dos personagens */
+.humano,
+.gorila {
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+/* Humanos */
+.humano {
+  width: 40px;
+  height: 40px;
+}
+
+.humano.vivo {
+  background-image: url('../assets/humano.png');
+}
+
+.humano.morto {
+  background-image: url('../assets/humano.png');
+  filter: grayscale(100%) brightness(60%);
+  opacity: 0.5;
+}
+
+/* Gorila */
+.gorila {
+  background-image: url('../assets/gorila.png');
+  width: 60px;
+  height: 60px;
+}
+
+/* Log de batalha */
 #log {
-  background-color: #f4f4f4;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  max-width: 600px;
-  padding: 15px;
-  margin: 0 auto;
   text-align: left;
-  height: 200px;
+  max-height: 200px;
   overflow-y: auto;
-  box-shadow: inset 0 0 10px #ccc;
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #c8e6c9;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+#log h2 {
+  margin-bottom: 10px;
+  color: #2e7d32;
 }
 
 #log p {
-  margin-bottom: 8px;
   font-size: 14px;
+  margin: 4px 0;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  #batalha {
-    flex-direction: column;
-    align-items: center;
+/* Scrollbar estilizado */
+#log::-webkit-scrollbar {
+  width: 6px;
+}
+
+#log::-webkit-scrollbar-thumb {
+  background-color: #81c784;
+  border-radius: 4px;
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 600px) {
+  .buttons button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
   }
 
-  #humanos {
-    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
-  }
-
-  #status {
-    width: 95%;
+  .status p {
+    font-size: 1rem;
   }
 }
+
