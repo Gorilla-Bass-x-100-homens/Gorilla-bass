@@ -1,0 +1,170 @@
+// Variáveis globais
+let vidaGorila = 100;
+let ataques = 0;
+let humanos = [];
+const TOTAL_HUMANOS = 100;
+
+// Elementos do DOM
+const vidaGorilaSpan = document.getElementById("vidaGorila");
+const humanosVivosSpan = document.getElementById("humanosVivos");
+const ataquesSpan = document.getElementById("ataques");
+const logDiv = document.getElementById("log");
+const gorilaImg = document.getElementById("gorila");
+const humanosContainer = document.getElementById("humanos");
+
+// Função para criar os humanos na interface
+function criarHumanos() {
+  humanosContainer.innerHTML = "";
+  humanos.forEach((vivo, index) => {
+    const span = document.createElement("span");
+    span.classList.add("humano");
+    span.classList.add(vivo ? "vivo" : "morto");
+    span.textContent = "🧍";
+    span.id = `humano-${index}`;
+    humanosContainer.appendChild(span);
+  });
+}
+
+// Atualiza todos os dados na tela
+function atualizarInterface() {
+  vidaGorilaSpan.textContent = vidaGorila;
+  humanosVivosSpan.textContent = humanos.filter(h => h).length;
+  ataquesSpan.textContent = ataques;
+  criarHumanos();
+}
+
+// Adiciona mensagem ao log de batalha
+function adicionarLog(mensagem) {
+  const p = document.createElement("p");
+  p.textContent = mensagem;
+  logDiv.appendChild(p);
+  logDiv.scrollTop = logDiv.scrollHeight; // rolar automaticamente
+}
+
+// Efeito visual para ações do gorila
+function animarGorila(acao) {
+  gorilaImg.classList.add(acao);
+  setTimeout(() => gorilaImg.classList.remove(acao), 400);
+}
+
+// Atacar humanos
+function atacar() {
+  if (fimDeJogo()) return;
+
+  animarGorila("ataque");
+
+  let eliminados = 0;
+  humanos.forEach((vivo, i) => {
+    if (vivo && Math.random() < 0.1) {
+      humanos[i] = false;
+      eliminados++;
+    }
+  });
+
+  ataques++;
+  adicionarLog(`O gorila atacou e eliminou ${eliminados} humanos!`);
+  salvarEstado();
+  atualizarInterface();
+  verificarFimDeJogo();
+}
+
+// Defender: recupera um pouco de vida
+function defender() {
+  if (fimDeJogo()) return;
+
+  animarGorila("defesa");
+
+  vidaGorila += 5;
+  if (vidaGorila > 100) vidaGorila = 100;
+
+  adicionarLog("O gorila se defendeu e recuperou 5 de vida.");
+  salvarEstado();
+  atualizarInterface();
+}
+
+// Curar: recuperação maior
+function curar() {
+  if (fimDeJogo()) return;
+
+  animarGorila("cura");
+
+  vidaGorila += 15;
+  if (vidaGorila > 100) vidaGorila = 100;
+
+  adicionarLog("O gorila usou uma banana mística e curou 15 de vida!");
+  salvarEstado();
+  atualizarInterface();
+}
+
+// Salvar progresso no localStorage
+function salvarEstado() {
+  localStorage.setItem("gorilaVida", vidaGorila);
+  localStorage.setItem("ataques", ataques);
+  localStorage.setItem("humanos", JSON.stringify(humanos));
+}
+
+// Carregar dados salvos
+function carregarEstado() {
+  const vidaSalva = parseInt(localStorage.getItem("gorilaVida"));
+  const ataquesSalvos = parseInt(localStorage.getItem("ataques"));
+  const humanosSalvos = JSON.parse(localStorage.getItem("humanos"));
+
+  vidaGorila = !isNaN(vidaSalva) ? vidaSalva : 100;
+  ataques = !isNaN(ataquesSalvos) ? ataquesSalvos : 0;
+  humanos = Array.isArray(humanosSalvos) && humanosSalvos.length === TOTAL_HUMANOS
+    ? humanosSalvos
+    : new Array(TOTAL_HUMANOS).fill(true);
+}
+
+// Verifica se todos os humanos morreram ou o gorila foi derrotado
+function verificarFimDeJogo() {
+  const vivos = humanos.filter(h => h).length;
+
+  if (vidaGorila <= 0) {
+    adicionarLog("O gorila foi derrotado! Os humanos venceram!");
+    desativarAcoes();
+  }
+
+  if (vivos === 0) {
+    adicionarLog("Todos os humanos foram derrotados! O gorila venceu!");
+    desativarAcoes();
+  }
+}
+
+// Desativa os botões de ação
+function desativarAcoes() {
+  document.querySelectorAll("#acoes button").forEach(btn => {
+    btn.disabled = true;
+  });
+}
+
+// Checagem auxiliar
+function fimDeJogo() {
+  return vidaGorila <= 0 || humanos.filter(h => h).length === 0;
+}
+
+// Humanos atacam automaticamente de tempo em tempo
+function ataqueDosHumanos() {
+  if (fimDeJogo()) return;
+
+  const dano = Math.floor(Math.random() * 8); // entre 0 e 7 de dano
+  vidaGorila -= dano;
+
+  if (dano > 0) {
+    adicionarLog(`Os humanos atacaram e causaram ${dano} de dano ao gorila.`);
+  } else {
+    adicionarLog("Os humanos erraram o ataque.");
+  }
+
+  if (vidaGorila < 0) vidaGorila = 0;
+  salvarEstado();
+  atualizarInterface();
+  verificarFimDeJogo();
+}
+
+// Inicialização
+window.onload = () => {
+  carregarEstado();
+  atualizarInterface();
+  setInterval(ataqueDosHumanos, 5000); // humanos atacam a cada 5 segundos
+};

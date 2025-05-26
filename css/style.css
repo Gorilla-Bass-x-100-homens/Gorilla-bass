@@ -1,0 +1,153 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #a2f5a2, #4ca14c);
+  color: #1d1d1d;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #2e5e2e;
+}
+
+/* Status bar */
+#status {
+  background: #fff;
+  border: 2px solid #3a833a;
+  border-radius: 10px;
+  padding: 15px;
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#status p {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+/* Batalha */
+#batalha {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+#gorila {
+  width: 120px;
+  transition: transform 0.3s;
+}
+
+/* Animações visuais simples */
+#gorila.ataque {
+  transform: scale(1.2) rotate(-10deg);
+}
+
+#gorila.defesa {
+  filter: brightness(1.2);
+}
+
+#gorila.cura {
+  animation: curarBrilho 1s infinite alternate;
+}
+
+@keyframes curarBrilho {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.5); }
+}
+
+#humanos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25px, 1fr));
+  gap: 5px;
+  max-width: 300px;
+}
+
+.humano {
+  font-size: 20px;
+  transition: opacity 0.3s;
+}
+
+.humano.vivo {
+  color: #222;
+}
+
+.humano.morto {
+  color: #999;
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+/* Botões de ação */
+#acoes {
+  margin-bottom: 20px;
+}
+
+#acoes button {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#acoes button:hover {
+  background-color: #1b5e20;
+}
+
+#acoes button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Log de mensagens */
+#log {
+  background-color: #f4f4f4;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  max-width: 600px;
+  padding: 15px;
+  margin: 0 auto;
+  text-align: left;
+  height: 200px;
+  overflow-y: auto;
+  box-shadow: inset 0 0 10px #ccc;
+}
+
+#log p {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #batalha {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #humanos {
+    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+  }
+
+  #status {
+    width: 95%;
+  }
+}
